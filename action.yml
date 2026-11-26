@@ -1,0 +1,29 @@
+name: DreamLake CI/CT evidence
+description: Save a job's outputs (videos, metrics, summaries) on its DreamLake CI/CT run page.
+author: DreamLake
+branding:
+  icon: upload-cloud
+  color: blue
+inputs:
+  path:
+    description: Directory your job wrote its outputs to
+    default: outputs
+  include:
+    description: Keep only paths matching these globs (one per line, relative to path); default everything
+    default: ""
+  exclude:
+    description: Leave out paths matching these globs (one per line)
+    default: ""
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        EVIDENCE_PATH: ${{ inputs.path }}
+        EVIDENCE_INCLUDE: ${{ inputs.include }}
+        EVIDENCE_EXCLUDE: ${{ inputs.exclude }}
+      run: |
+        args=("$EVIDENCE_PATH")
+        while IFS= read -r g; do [ -n "$g" ] && args+=(--include "$g"); done <<< "$EVIDENCE_INCLUDE"
+        while IFS= read -r g; do [ -n "$g" ] && args+=(--exclude "$g"); done <<< "$EVIDENCE_EXCLUDE"
+        python3 "$GITHUB_ACTION_PATH/evidence.py" "${args[@]}"
