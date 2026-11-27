@@ -2,7 +2,7 @@
 
 Keeps what a GitHub Actions job produced (videos, metrics, summaries) on the
 job's **DreamLake CI/CT** run page, when the job runs on a DreamLake GPU
-machine (`runs-on: dreamlake-gpu-…`).
+machine (`runs-on: blacksmith-4vcpu-gpu-rtx5090-ubuntu-2404`).
 
 ```yaml
     steps:
